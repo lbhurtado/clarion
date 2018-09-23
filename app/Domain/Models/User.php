@@ -2,7 +2,9 @@
 
 namespace Clarion\Domain\Models;
 
+use Clarion\Domain\Traits\HasMobile;
 use Illuminate\Database\Eloquent\Model;
+use Tightenco\Parental\ReturnsChildModels;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -13,7 +15,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class User extends Model implements Transformable
 {
-    use TransformableTrait;
+    use TransformableTrait, HasMobile, ReturnsChildModels;
 
     /**
      * The attributes that are mass assignable.

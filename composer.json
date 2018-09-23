@@ -18,7 +18,8 @@
         "fideloper/proxy": "~4.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
-        "propaganistas/laravel-phone": "^4.0"
+        "propaganistas/laravel-phone": "^4.0",
+        "tightenco/parental": "^0.5.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.2",

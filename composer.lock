@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6405b575af7c197fe1c804d30e743703",
+    "content-hash": "e9528b064e0aadef3341c46356c70321",
     "packages": [
         {
             "name": "botman/botman",
@@ -3612,6 +3612,46 @@
                 "laravel"
             ],
             "time": "2018-05-03T01:43:20+00:00"
+        },
+        {
+            "name": "tightenco/parental",
+            "version": "v0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tightenco/parental.git",
+                "reference": "7e0f8abecccbbc160b7af099cc1b1ded75d6c2f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tightenco/parental/zipball/7e0f8abecccbbc160b7af099cc1b1ded75d6c2f6",
+                "reference": "7e0f8abecccbbc160b7af099cc1b1ded75d6c2f6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "~5.6.0|~5.7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "3.7.*",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tightenco\\Parental\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Caleb Porzio",
+                    "email": "calebporzio@gmail.com"
+                }
+            ],
+            "description": "A simple eloquent trait that allows relationships to be accessed through child models.",
+            "time": "2018-09-06T13:02:30+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

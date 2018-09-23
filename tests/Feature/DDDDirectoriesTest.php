@@ -27,6 +27,7 @@ class DDDDirectoriesTest extends TestCase
     {
 		$this->assertTrue(is_dir(app_path('Domain/Jobs')));
 		$this->assertTrue(is_dir(app_path('Domain/Models')));
+        $this->assertTrue(is_dir(app_path('Domain/Traits')));
         $this->assertTrue(is_dir(app_path('Domain/Criteria')));
         $this->assertTrue(is_dir(app_path('Domain/Services')));
 		$this->assertTrue(is_dir(app_path('Domain/Listeners')));

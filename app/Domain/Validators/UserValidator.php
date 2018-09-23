@@ -19,12 +19,12 @@ class UserValidator extends LaravelValidator
      */
     protected $rules = [
         ValidatorInterface::RULE_CREATE => [
-		'required|phone:PH'	=>'	mobile=>required|phone:PH',
-		''	=>'	mobile',
-	],
+            'mobile' => 'required|phone:PH',
+            'handle' => 'min:1',
+        ],
         ValidatorInterface::RULE_UPDATE => [
-		'required|phone:PH'	=>'	mobile=>required|phone:PH',
-		''	=>'	mobile',
-	],
+            'mobile' => 'required|phone:PH',
+            'handle' => 'min:1',
+        ],
     ];
 }

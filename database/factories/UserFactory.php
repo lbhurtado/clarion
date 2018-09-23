@@ -20,3 +20,11 @@ $factory->define(Clarion\Domain\Models\User::class, function (Faker $faker) {
         'handle' => $faker->name,
     ];
 });
+
+$factory->define(Clarion\Domain\Models\Admin::class, function (Faker $faker) {
+
+    return [
+        'mobile' => $faker->phoneNumber,
+        'handle' => $faker->name,
+    ];
+});
