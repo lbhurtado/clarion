@@ -168,6 +168,8 @@ return [
         Clarion\Providers\EventServiceProvider::class,
         Clarion\Providers\RouteServiceProvider::class,
 
+
+        Clarion\Providers\ModelServiceProvider::class,
     ],
 
     /*
@@ -219,4 +221,5 @@ return [
 
     ],
 
+    'faker_locale' => 'en_PH',
 ];

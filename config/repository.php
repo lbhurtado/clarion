@@ -232,13 +232,13 @@ return [
         'paths'         => [
             'models'       => 'Domain/Models',
             'repositories' => 'Infrastructure/EloquentRepositories',
-            'interfaces'   => 'Domain\Contracts',
-            'transformers' => 'Http\Transformers',
-            'presenters'   => 'Http\Presenters',
-            'validators'   => 'Domain\Validators',
-            'controllers'  => 'Http\Controllers',
+            'interfaces'   => 'Domain/Contracts',
+            'transformers' => 'Http/Transformers',
+            'presenters'   => 'Http/Presenters',
+            'validators'   => 'Domain/Validators',
+            'controllers'  => 'Http/Controllers',
             'provider'     => 'RepositoryServiceProvider',
-            'criteria'     => 'Domain\Criteria'
+            'criteria'     => 'Domain/Criteria'
         ]
     ]
 ];

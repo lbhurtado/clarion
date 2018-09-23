@@ -13,13 +13,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Clarion\User::class, function (Faker $faker) {
-    static $password;
+$factory->define(Clarion\Domain\Models\User::class, function (Faker $faker) {
 
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'mobile' => $faker->phoneNumber,
+        'handle' => $faker->name,
     ];
 });
