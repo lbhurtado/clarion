@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers\BotMan;
+namespace Clarion\Providers\BotMan;
 
 use BotMan\BotMan\Drivers\DriverManager;
 use BotMan\Studio\Providers\DriverServiceProvider as ServiceProvider;

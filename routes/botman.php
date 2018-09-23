@@ -1,5 +1,5 @@
 <?php
-use App\Http\Controllers\BotManController;
+use Clarion\Http\Controllers\BotManController;
 
 $botman = resolve('botman');
 
