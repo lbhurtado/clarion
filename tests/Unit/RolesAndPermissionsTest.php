@@ -56,9 +56,9 @@ class RolesAndPermissionsTest extends TestCase
     {
         $this->artisan('db:seed', ['--class' => 'RolesAndPermissionsSeeder']);
 
-        $this->assertEquals(Role::all()->count(), 3);
-        $this->assertEquals(Permission::all()->count(), 4);
+        $this->assertEquals(Role::all()->count(), 5);
+        $this->assertEquals(Permission::all()->count(), 6);
 
-        $this->assertEquals(Role::where('name', 'writer')->count(), 1);
+        $this->assertEquals(Role::where('name', 'admin')->count(), 1);
     } 
 }

@@ -12,20 +12,28 @@ class RolesAndPermissionsSeeder extends Seeder
         app()['cache']->forget('spatie.permission.cache');
 
         // create permissions
-        Permission::create(['name' => 'edit articles']);
-        Permission::create(['name' => 'delete articles']);
-        Permission::create(['name' => 'publish articles']);
-        Permission::create(['name' => 'unpublish articles']);
+        Permission::create(['name' => 'check in others']);
+        Permission::create(['name' => 'invite others']);
+        Permission::create(['name' => 'send messages upwards']);
+        Permission::create(['name' => 'send messages sideways']);
+        Permission::create(['name' => 'send messages downwards']);
+        Permission::create(['name' => 'vet others']);
 
         // create roles and assign created permissions
 
-        $role = Role::create(['name' => 'writer']);
-        $role->givePermissionTo('edit articles');
+        Role::create(['name' => 'subscriber'])
+            ->givePermissionTo('check in others');
 
-        $role = Role::create(['name' => 'moderator']);
-        $role->givePermissionTo(['publish articles', 'unpublish articles']);
+        Role::create(['name' => 'worker'])
+            ->givePermissionTo('check in others');
 
-        $role = Role::create(['name' => 'super-admin']);
-        $role->givePermissionTo(Permission::all());
+        Role::create(['name' => 'staff'])
+            ->givePermissionTo('check in others');
+
+        Role::create(['name' => 'operator'])
+            ->givePermissionTo('check in others');
+
+        Role::create(['name' => 'admin'])
+            ->givePermissionTo(Permission::all());
     }
 }

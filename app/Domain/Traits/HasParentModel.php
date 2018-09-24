@@ -1,0 +1,31 @@
+<?php
+
+namespace Clarion\Domain\Traits;
+
+use Spatie\Permission\Models\Role;
+use Illuminate\Database\Eloquent\Model;
+use Tightenco\Parental\HasParentModel as BaseHasParentModel;
+
+trait HasParentModel
+{
+    use BaseHasParentModel {
+        BaseHasParentModel::bootHasParentModel as parentBootHasParentModel;
+    }
+
+    public static function bootHasParentModel()
+    {
+        static::parentBootHasParentModel();
+
+        static::created(function ($model) {
+        
+            if (!isset(self::$role)) {
+
+                throw new NoRoleDefined();
+            }
+            
+            Role::findOrCreate(self::$role, $model->guard_name);
+
+            $model->assignRole(self::$role);            
+        });
+    }
+}
