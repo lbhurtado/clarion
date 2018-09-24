@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-
+use Clarion\Domain\Models as Models;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -13,26 +13,21 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(Clarion\Domain\Models\User::class, function (Faker $faker) {
+$children = [
+    Models\User::class,
+    Models\Admin::class,
+    Models\Operator::class,
+    Models\Staff::class,
+    Models\Subscriber::class,
+    Models\Worker::class,
+];
 
-    return [
-        'mobile' => $faker->phoneNumber,
-        'handle' => $faker->name,
-    ];
-});
+foreach ($children as $child) {
+    $factory->define($child, function (Faker $faker) {
 
-$factory->define(Clarion\Domain\Models\Admin::class, function (Faker $faker) {
-
-    return [
-        'mobile' => $faker->phoneNumber,
-        'handle' => $faker->name,
-    ];
-});
-
-$factory->define(Clarion\Domain\Models\Operator::class, function (Faker $faker) {
-
-    return [
-        'mobile' => $faker->phoneNumber,
-        'handle' => $faker->name,
-    ];
-});
+        return [
+            'mobile' => $faker->phoneNumber,
+            'handle' => $faker->name,
+        ];
+    });
+}

@@ -23,9 +23,14 @@ trait HasParentModel
                 throw new NoRoleDefined();
             }
             
-            Role::findOrCreate(self::$role, $model->guard_name);
+            Role::findOrCreate(self::$role, $model->getGuardName());
 
             $model->assignRole(self::$role);            
         });
+    }
+
+    public function getGuardName()
+    {
+    	return $this->guard_name;
     }
 }

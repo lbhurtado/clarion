@@ -3,9 +3,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Clarion\Domain\Models\Admin;
 use Spatie\Permission\Models\Role;
-use Clarion\Domain\Models\Operator;
+use Clarion\Domain\Models as Models;
 use Clarion\Domain\Contracts\UserRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,6 +12,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ParentModelsTest extends TestCase
 {
 	use RefreshDatabase;
+
+	protected $children = [
+		'09173011987' => Models\Admin::class,
+		'09178951991' => Models\Operator::class,
+		'09188362340' => Models\Staff::class,
+		'09188362341' => Models\Subscriber::class,
+		'09188362342' => Models\Worker::class,
+	];
 
     public function setUp()
     {
@@ -24,43 +31,30 @@ class ParentModelsTest extends TestCase
     }
 
   	/** @test */
-    function admin_model_is_essentially_a_user_with_a_type()
+    function child_model_is_essentially_a_user_with_a_type()
     {
-	    $admin = factory(Admin::class)->create(['mobile' => '09189362340']);
+    	foreach ($this->children as $mobile => $class) {
+		    $child = factory($class)->create(compact('mobile'));
 
-  		$user = $this->app->make(UserRepository::class)->findByField('mobile', $admin->mobile)->first();
+	  		$user = $this->app->make(UserRepository::class)->findByField('mobile', $child->mobile)->first();
 
-	    $this->assertEquals($user->id, $admin->id);
-	    $this->assertEquals($user->type, Admin::class);
+		    $this->assertEquals($user->id, $child->id);
+		    $this->assertEquals($user->type, $class);
+    	}
     }
 
     /** @test */
-    function admin_model_has_an_admin_role()
+    function child_model_has_a_child_role()
     {	
-    	$admin = factory(Admin::class)->create(['mobile' => '09189362340']);
+    	foreach ($this->children as $mobile => $class) {
+		    $child = factory($class)->create(compact('mobile'));
 
- 		$this->assertDatabaseHas('roles', ['name' => 'admin']);
-    	$this->assertTrue($admin->hasRole('admin'));    
+ 			$this->assertDatabaseHas('roles', [
+ 				'name' 		 => $child::$role, 
+ 				'guard_name' => $child->getGuardName()
+ 			]);
+
+    		$this->assertTrue($child->hasRole($child::$role)); 
+    	}
     }
-
-  	/** @test */
-    function operator_model_is_essentially_a_user_with_a_type()
-    {
-	    $operator = factory(Operator::class)->create(['mobile' => '09189362340']);
-
-  		$user = $this->app->make(UserRepository::class)->findByField('mobile', $operator->mobile)->first();
-
-	    $this->assertEquals($user->id, $operator->id);
-	    $this->assertEquals($user->type, Operator::class);
-    }
-
-  	/** @test */
-    function operator_model_has_an_operator_role()
-    {	
-    	$operator = factory(Operator::class)->create(['mobile' => '09189362340']);
-
- 		$this->assertDatabaseHas('roles', ['name' => 'operator']);
-    	$this->assertTrue($operator->hasRole('operator'));    
-    }
-
 }
