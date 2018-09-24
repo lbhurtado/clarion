@@ -2,6 +2,7 @@
 
 namespace Clarion\Domain\Models;
 
+use Clarion\Domain\Traits\IsAnonymous;
 use Clarion\Domain\Traits\HasMobile;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class User extends Model implements Transformable
 {
-    use TransformableTrait, HasMobile, ReturnsChildModels, HasRoles;
+    use TransformableTrait, HasMobile, ReturnsChildModels, HasRoles, IsAnonymous;
 
     protected $guard_name = 'web';
 
@@ -30,4 +31,8 @@ class User extends Model implements Transformable
 		'handle',
 	];
 
+    public function messengers()
+    {
+        return $this->hasMany(Messenger::class, 'identifier', 'identifier');
+    }
 }

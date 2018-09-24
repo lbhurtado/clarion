@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "593140b6a75093bf165a50d119f02f39",
+    "content-hash": "4d3e354f8bc65d9e7eb10d9694ec4790",
     "packages": [
         {
             "name": "botman/botman",
@@ -1250,6 +1250,50 @@
             ],
             "description": "ISO 3166-1 alpha-2 mapping",
             "time": "2015-12-15T15:40:03+00:00"
+        },
+        {
+            "name": "larapackages/anonymous-relationships",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/larapackages/anonymous-relationships.git",
+                "reference": "7952d16d14e599b88e7dbd9d140575932cef720c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/larapackages/anonymous-relationships/zipball/7952d16d14e599b88e7dbd9d140575932cef720c",
+                "reference": "7952d16d14e599b88e7dbd9d140575932cef720c",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Larapackages\\AnonymousRelationships\\Providers\\AnonymousRelationshipsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Larapackages\\AnonymousRelationships\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexander Manukian",
+                    "email": "alikmanukian@gmail.com"
+                }
+            ],
+            "description": "Laravel anonymous relationships in eloquent",
+            "keywords": [
+                "eloquent relationships",
+                "laravel"
+            ],
+            "time": "2018-04-30T09:19:05+00:00"
         },
         {
             "name": "laravel/framework",

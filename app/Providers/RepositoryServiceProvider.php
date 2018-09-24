@@ -24,6 +24,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(\Clarion\Domain\Contracts\UserRepository::class, \Clarion\Infrastructure\EloquentRepositories\UserRepositoryEloquent::class);
+        $this->app->bind(\Clarion\Domain\Contracts\MessengerRepository::class, \Clarion\Infrastructure\EloquentRepositories\MessengerRepositoryEloquent::class);
         //:end-bindings:
     }
 }

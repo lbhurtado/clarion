@@ -94,4 +94,12 @@ class UserTest extends TestCase
         $this->assertTrue($user->hasPermissionTo('edit articles'));
         $this->assertTrue($user->hasPermissionTo('delete articles'));
     }   
+
+    /** @test */
+    function user_model_has_identifier_attribute()
+    {
+        $user = factory(User::class)->create(['mobile' => '09189362340']);
+
+        $this->assertTrue($user->identifier !== null);
+    }    
 }
