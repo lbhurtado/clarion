@@ -8,6 +8,9 @@ class Mobile
 {
 	protected $mobile;
 
+    protected $authy_number;
+
+    protected $authy_dialling_code;
     /**
      * Mobile constructor.
      * @param $number
@@ -29,7 +32,19 @@ class Mobile
 
     public static function prefix($number, $country = 'PH')
     {
-    	
 		return preg_split("/[\s,]+/", (new static($number, $country))->mobile->formatInternational('PH'))[1];
+    }
+
+    public static function authy($number, $country = 'PH')
+    {
+        $split = preg_split(
+            "/[\s,]+/", 
+            (new static($number, $country))->mobile->formatInternational()
+        );
+
+        $code = (string) (integer) array_shift($split);
+        $number = implode('',$split);
+
+        return compact('code', 'number');
     }
 }

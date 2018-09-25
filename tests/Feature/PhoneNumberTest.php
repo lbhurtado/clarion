@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Clarion\Domain\Models\Mobile;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -75,5 +76,17 @@ class PhoneNumberTest extends TestCase
 
     	$v = $this->app['validator']->make($data, $rules);
         $this->assertTrue($v->fails());
+    }
+
+    /** @test */
+    public function phone_number_has_components()
+    {
+        $phone = phone('639173011987', 'PH');
+        $this->assertEquals(Mobile::prefix($phone), '917');
+
+        $this->assertEquals(Mobile::authy($phone), [
+            'code' => '63',
+            'number' => '9173011987'
+        ]);
     }
 }

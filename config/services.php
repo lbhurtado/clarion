@@ -30,9 +30,12 @@ return [
     ],
 
     'stripe' => [
-        'model' => Clarion\User::class,
+        'model' => Clarion\Domain\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'authy' => [
+        'secret' => env('AUTHY_SECRET'),
+    ],
 ];
