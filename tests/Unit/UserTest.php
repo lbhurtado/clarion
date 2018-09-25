@@ -10,6 +10,8 @@ use Spatie\Permission\Models\Permission;
 use Clarion\Domain\Contracts\UserRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Clarion\Domain\Criteria\HasTheFollowing;
+use Clarion\Domain\Criteria\HasTheFollowingMobileNumbers;
 
 class UserTest extends TestCase
 {
@@ -101,5 +103,49 @@ class UserTest extends TestCase
         $user = factory(User::class)->create(['mobile' => '09189362340']);
 
         $this->assertTrue($user->identifier !== null);
+    }
+
+    /** @test */
+    function user_model_has_the_following_moble_criterion()
+    {
+        factory(User::class)->create(['mobile' => '09189362340']);
+        factory(User::class)->create(['mobile' => '09173011987']);
+
+        \DB::listen(function ($query) {
+            var_dump($query->sql);
+        });
+
+        $users = $this->app->make(UserRepository::class);
+
+        $this->assertEquals($users->all()->count(), 2);
+
+        $users->pushCriteria(HasTheFollowing::mobile('09189362340'));   
+
+        $this->assertEquals($users->all()->count(), 1);
+
+        $users->popCriteria(HasTheFollowing::mobile('09189362340'));
+
+        $users->pushCriteria(HasTheFollowing::mobile('09189362340', '09173011987'));   
+
+        $this->assertEquals($users->all()->count(), 2);
     }    
+
+    /** @test */
+    function user_model_has_the_following_handle_criterion()
+    {
+        factory(User::class)->create(['mobile' => '09189362340', 'handle' => 'apple']);
+        factory(User::class)->create(['mobile' => '09173011987', 'handle' => 'lester']);
+
+        \DB::listen(function ($query) {
+            var_dump($query->sql);
+        });
+        
+        $users = $this->app->make(UserRepository::class);
+
+        $this->assertEquals($users->all()->count(), 2);
+
+        $users->pushCriteria(HasTheFollowing::handle('apple'));
+
+        $this->assertEquals($users->all()->count(), 1);
+    }   
 }

@@ -5,8 +5,10 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Clarion\Domain\Models\User;
 use Clarion\Domain\Models\Messenger;
+use Clarion\Domain\Contracts\UserRepository;
 use Illuminate\Foundation\Testing\WithFaker;
 use Clarion\Domain\Contracts\MessengerRepository;
+use Clarion\Domain\Criteria\WithMessengerCriteria;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MessengerTest extends TestCase
@@ -74,4 +76,38 @@ class MessengerTest extends TestCase
     	$this->assertEquals($user->identifier, $identifier);
     }
 
+  	/** @test */
+    function messenger_model_as_a_eager_load_criterion_of_user()
+    {
+
+    	if (\DB::connection()->getDriverName() != 'mysql') {
+    		return $this->assertTrue(true);
+    	}
+
+    	$users = $this->app->make(UserRepository::class);
+
+    	$user1 = factory(User::class)->create(['mobile' => '09189362340', 'handle' => 'Lester']);
+    	$user2 = factory(User::class)->create(['mobile' => '09173011987', 'handle' => 'Retsel']);
+
+    	$this->assertEquals($users->all()->count(), 2);
+
+    	$user2->messengers()->create([
+    		'driver'  => 'Facebook',
+    	 	'chat_id' => 'lester.hurtado'
+    	 ]);
+
+    	$user2->messengers()->create([
+    		'driver'  => 'Telegram',
+    	 	'chat_id' => 'lbhurtado'
+    	 ]);
+
+    	$user2->messengers()->create([
+    		'driver'  => 'WhatsApp',
+    	 	'chat_id' => 'lbhurtado'
+    	 ]);
+
+    	$users->pushCriteria(new WithMessengerCriteria());
+
+    	$this->assertEquals($users->all()->count(), 3);
+    }
 }

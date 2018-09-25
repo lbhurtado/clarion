@@ -17,3 +17,21 @@ Route::get('/', function () {
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
+
+Route::get('/test', function (Clarion\Domain\Contracts\UserRepository $users) {
+   \DB::listen(function ($query) {
+ 		var_dump($query->sql);
+	});
+   // factory(Clarion\Domain\Models\User::class)->create(['mobile' => '09173011987', 'handle' => 'Retsel']);
+
+  $user = $users->findWhere(['handle' => 'Retsel'])->first();
+
+ //  $user->messengers()->create([
+ //    'driver'  => 'Facebook',
+ //    'chat_id' => 'lester.hurtado'
+	// ]);
+  $users->pushCriteria(new Clarion\Domain\Criteria\WithMessengerCriteria());
+
+	dd($users->all());
+
+});

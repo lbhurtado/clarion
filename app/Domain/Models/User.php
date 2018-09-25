@@ -21,6 +21,11 @@ class User extends Model implements Transformable
 
     protected $guard_name = 'web';
 
+    protected $fieldSearchable = [
+        'mobile',
+        'handle',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
