@@ -111,10 +111,6 @@ class UserTest extends TestCase
         factory(User::class)->create(['mobile' => '09189362340']);
         factory(User::class)->create(['mobile' => '09173011987']);
 
-        \DB::listen(function ($query) {
-            var_dump($query->sql);
-        });
-
         $users = $this->app->make(UserRepository::class);
 
         $this->assertEquals($users->all()->count(), 2);
@@ -133,19 +129,20 @@ class UserTest extends TestCase
     /** @test */
     function user_model_has_the_following_handle_criterion()
     {
-        factory(User::class)->create(['mobile' => '09189362340', 'handle' => 'apple']);
-        factory(User::class)->create(['mobile' => '09173011987', 'handle' => 'lester']);
+        factory(User::class)->create(['mobile' => '09171111111', 'handle' => 'lester']);
+        factory(User::class)->create(['mobile' => '09182222222', 'handle' => 'apple']);
+        factory(User::class)->create(['mobile' => '09193333333', 'handle' => 'cheesecake']);
 
-        \DB::listen(function ($query) {
-            var_dump($query->sql);
-        });
+        // \DB::listen(function ($query) {
+        //     var_dump($query->sql);
+        // });
         
         $users = $this->app->make(UserRepository::class);
 
+        $this->assertEquals($users->all()->count(), 3);
+
+        $users->pushCriteria(HasTheFollowing::handle('apple', 'cheesecake'));
+
         $this->assertEquals($users->all()->count(), 2);
-
-        $users->pushCriteria(HasTheFollowing::handle('apple'));
-
-        $this->assertEquals($users->all()->count(), 1);
     }   
 }
