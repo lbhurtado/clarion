@@ -222,4 +222,6 @@ return [
     ],
 
     'faker_locale' => 'en_PH',
+
+    'timezone' => 'Asia/Manila',
 ];

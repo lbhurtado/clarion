@@ -2,13 +2,12 @@
 
 namespace Clarion\Domain\Models;
 
-use Clarion\Domain\Traits\IsAnonymous;
-use Clarion\Domain\Traits\HasMobile;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Tightenco\Parental\ReturnsChildModels;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
+use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy};
 
 /**
  * Class User.
@@ -17,13 +16,14 @@ use Prettus\Repository\Traits\TransformableTrait;
  */
 class User extends Model implements Transformable
 {
-    use TransformableTrait, HasMobile, ReturnsChildModels, HasRoles, IsAnonymous;
+    use TransformableTrait, ReturnsChildModels, HasRoles, IsAnonymous, HasMobile, HasAuthy;
 
     protected $guard_name = 'web';
 
     protected $fieldSearchable = [
         'mobile',
         'handle',
+        'authy_id'
     ];
 
     /**

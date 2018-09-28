@@ -13,8 +13,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Clarion\Events\Event' => [
-            'Clarion\Listeners\EventListener',
+        'Clarion\Domain\Events\UserRecorded' => [
+            'Clarion\Domain\Listeners\Capture\UserMobileData',
+        ],
+        'Clarion\Domain\Events\UserRegistered' => [
+            'Clarion\Domain\Listeners\Notify\UserAboutVerification',
         ],
     ];
 

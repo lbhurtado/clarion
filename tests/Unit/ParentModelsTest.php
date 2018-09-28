@@ -28,6 +28,8 @@ class ParentModelsTest extends TestCase
 
         // now re-register all the roles and permissions
         $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+
+        $this->withoutEvents();
     }
 
   	/** @test */

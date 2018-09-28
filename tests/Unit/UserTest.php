@@ -17,6 +17,13 @@ class UserTest extends TestCase
 {
 	use RefreshDatabase;
 
+    function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutEvents();
+    }
+    
   	/** @test */
     function user_model_has_required_mobile_field()
     {

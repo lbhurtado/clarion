@@ -11,6 +11,9 @@
 |
 */
 
+use Clarion\Domain\Models\User;
+use Clarion\Domain\Contracts\UserRepository;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -44,7 +47,33 @@ Route::get('/authy', function() {
 
 	$authyUser = app('rinvex.authy.user');
 
-	$user = $authyUser->register('lester@3rd.tel', '9173011876', '63');
-	
+	$user = $authyUser->register('lester@3rd.tel', '9173011987', '63');
+
 	dd($user);
+
+	// $userStatus = $authyUser->status($user->get('user')['id']); // Get user status
+
+	$authyToken = app('rinvex.authy.token');
+
+	// $smsTokenSent = $authyToken->send($user->get('user')['id'], 'sms');
+	// $smsTokenSent = $authyToken->send(7952368, 'sms');
+
+	// dd($smsTokenSent);
+	// $tokenVerified = $authyToken->verify(210492, $user->get('user')['id']); // Verify token
+
+	$tokenVerified = $authyToken->verify(359057, 7952368);
+	
+	dd($tokenVerified);
+});
+
+Route::get('/create_user', function(UserRepository $users) {
+
+	User::create(['mobile' => '09173011987']);
+});
+
+Route::get('/verify/{otp}', function(UserRepository $users, $otp) {
+	
+	$user = $users->getByCriteria(\Clarion\Domain\Criteria\HasTheFollowing::mobile('09173011987'))->first();
+
+	\Clarion\Domain\Jobs\VerifyOTP::dispatch($user, $otp);
 });

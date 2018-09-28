@@ -16,6 +16,13 @@ class MessengerTest extends TestCase
 {
 	use RefreshDatabase;
 
+    function setUp()
+    {
+        parent::setUp();
+
+        $this->withoutEvents();
+    }
+    
   	/** @test */
     function messenger_model_has_required_driver_field()
     {
