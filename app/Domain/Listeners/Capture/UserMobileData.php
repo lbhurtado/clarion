@@ -13,7 +13,7 @@ class UserMobileData
      * @param  object  $event
      * @return void
      */
-    public function handle(\Clarion\Domain\Events\UserRecorded $event)
+    public function handle(\Clarion\Domain\Events\UserWasRecorded $event)
     {
         \Clarion\Domain\Jobs\RegisterAuthyService::dispatch($event->user);
     }

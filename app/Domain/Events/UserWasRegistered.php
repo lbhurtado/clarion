@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class UserRecorded
+class UserWasRegistered
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -33,6 +33,6 @@ class UserRecorded
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.recorded');
+        return new PrivateChannel('user.registered');
     }
 }

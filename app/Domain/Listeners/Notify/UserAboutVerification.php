@@ -13,7 +13,7 @@ class UserAboutVerification
      * @param  UserRegistered  $event
      * @return void
      */
-    public function handle(\Clarion\Domain\Events\UserRegistered $event)
+    public function handle(\Clarion\Domain\Events\UserWasRegistered $event)
     {
         \Clarion\Domain\Jobs\RequestOTP::dispatch($event->user);
     }

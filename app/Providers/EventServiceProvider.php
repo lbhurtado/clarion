@@ -2,7 +2,9 @@
 
 namespace Clarion\Providers;
 
+use Clarion\Domain\Events as Events;
 use Illuminate\Support\Facades\Event;
+use Clarion\Domain\Listeners as Listeners;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -13,11 +15,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Clarion\Domain\Events\UserRecorded' => [
-            'Clarion\Domain\Listeners\Capture\UserMobileData',
+        Events\UserWasRecorded::class => [
+            Listeners\Capture\UserMobileData::class,
         ],
-        'Clarion\Domain\Events\UserRegistered' => [
-            'Clarion\Domain\Listeners\Notify\UserAboutVerification',
+        Events\UserWasRegistered::class => [
+            Listeners\Notify\UserAboutVerification::class,
         ],
     ];
 

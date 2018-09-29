@@ -4,6 +4,8 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Clarion\Domain\Models\User;
+use Clarion\Domain\Jobs as Jobs;
+use Clarion\Domain\Events as Events;
 use Illuminate\Foundation\Testing\WithFaker;
 use Clarion\Domain\Listeners\Notify as Notify;
 use Clarion\Domain\Listeners\Capture as Capture;
@@ -16,7 +18,7 @@ class UserEventsTest extends TestCase
     /** @test */
     function user_model_has_user_recorded_event()
     {
-        $this->expectsEvents(\Clarion\Domain\Events\UserRecorded::class);
+        $this->expectsEvents(Events\UserWasRecorded::class);
 
         $user = factory(User::class)->create(['mobile' => '9189362340']);
     }
@@ -30,7 +32,7 @@ class UserEventsTest extends TestCase
         $user = factory(User::class)->create(['mobile' => '9189362340']);
 
         $listener->shouldHaveReceived('handle')->with(\Mockery::on(function($event) use ($user) {
-            $this->assertInstanceOf(\Clarion\Domain\Events\UserRecorded::class, $event);
+            $this->assertInstanceOf(Events\UserWasRecorded::class, $event);
             return empty($event->user->authy_id);
         }))->once();  	
 
@@ -44,13 +46,13 @@ class UserEventsTest extends TestCase
 
         $user = factory(User::class)->create(['mobile' => '9189362340']);
 
-        \Queue::assertPushed(\Clarion\Domain\Jobs\RegisterAuthyService::class);
+        \Queue::assertPushed(Jobs\RegisterAuthyService::class);
     }
 
     /** @test */
     function user_model_has_user_registered_event()
     {
-        $this->expectsEvents(\Clarion\Domain\Events\UserRegistered::class);
+        $this->expectsEvents(Events\UserWasRegistered::class);
 
         $user = factory(User::class)->create(['mobile' => '9189362340']);
         $user->authy_id = '1234567';
@@ -68,7 +70,7 @@ class UserEventsTest extends TestCase
         $user->save();
 
         $listener->shouldHaveReceived('handle')->with(\Mockery::on(function($event) use ($user) {
-            $this->assertInstanceOf(\Clarion\Domain\Events\UserRegistered::class, $event);
+            $this->assertInstanceOf(Events\UserWasRegistered::class, $event);
             return !empty($event->user->authy_id);
         }))->once();    
     }
@@ -82,6 +84,6 @@ class UserEventsTest extends TestCase
         $user->authy_id = '1234567';
         $user->save();
         
-        \Queue::assertPushed(\Clarion\Domain\Jobs\RequestOTP::class);
+        \Queue::assertPushed(Jobs\RequestOTP::class);
     }
 }
