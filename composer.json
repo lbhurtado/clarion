@@ -22,7 +22,8 @@
         "propaganistas/laravel-phone": "^4.0",
         "rinvex/laravel-authy": "^3.0",
         "spatie/laravel-permission": "^2.20",
-        "tightenco/parental": "^0.5.0"
+        "tightenco/parental": "^0.5.0",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.2",
