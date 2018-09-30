@@ -10,7 +10,7 @@ use Clarion\Http\Controllers\Controller;
 use Clarion\Http\Resources\UserResource;
 use Clarion\Domain\Contracts\UserRepository;
 use Tymon\JWTAuth\Exceptions\{JWTException};
-use Clarion\Http\Requests\LoginRequest;
+use Clarion\Http\Requests\{UserCreateRequest, UserLoginRequest};
 
 class AuthController extends Controller
 {
@@ -38,9 +38,9 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register()
+    public function register(UserCreateRequest $request)
     {
-    	$user = $this->users->create($this->request->only(['mobile', 'handle']));
+    	$user = $this->users->create($request->only(['mobile', 'handle']));
 
     	$token = $this->auth->fromUser($user);
 
@@ -53,10 +53,10 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-   	public function login()
+   	public function login(UserLoginRequest $request)
     {
     	try {
-    		$credentials = $this->request->only(['mobile']);
+    		$credentials = $request->only(['mobile', 'password']);
 
     		if (!$token = $this->guard()->attempt($credentials))
     			return response()->json([

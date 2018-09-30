@@ -4,7 +4,7 @@ namespace Clarion\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class UserLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,8 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'mobile' => 'required|phone:PH'
+            'mobile' => 'required|phone:PH',
+            'password' => 'digits:4'
         ];
     }
 }
