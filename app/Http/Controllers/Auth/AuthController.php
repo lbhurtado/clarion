@@ -83,7 +83,8 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json($this->guard()->user());
+		return (new UserResource($this->guard()->user()));
+        // return response()->json($this->guard()->user());
     }
 
     /**

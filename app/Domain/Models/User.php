@@ -24,7 +24,7 @@ class User extends Authenticatable implements JWTSubject, Transformable
 
     public $username = 'mobile';
 
-    protected $guard_name = 'web';
+    protected $guard_name = 'api';
 
     protected $fieldSearchable = [
         'mobile',

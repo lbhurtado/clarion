@@ -76,10 +76,12 @@ class UserTest extends TestCase
     {
         $user = factory(User::class)->create(['mobile' => '09189362340']);
  
-        $role1 = Role::create(['name' => 'actor']);
-        $role2 = Role::create(['name' => 'writer']);
+        $role1 = Role::create(['guard_name' => 'api', 'name' => 'actor']);
 
-        $user->assignRole($role1, 'writer');
+        $role2 = Role::create(['guard_name' => 'api', 'name' => 'writer']);
+
+        $user->assignRole($role1, $role2);
+
 
         $this->assertEquals($user->roles->count(), 2);
         $this->assertTrue($user->hasRole('actor'));
