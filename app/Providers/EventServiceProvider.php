@@ -18,9 +18,9 @@ class EventServiceProvider extends ServiceProvider
         Events\UserWasRecorded::class => [
             Listeners\Capture\UserMobileData::class,
         ],
-        // Events\UserWasRegistered::class => [
-        //     Listeners\Notify\UserAboutVerification::class,
-        // ],
+        Events\UserWasRegistered::class => [
+            Listeners\Notify\UserAboutVerification::class,
+        ],
     ];
 
     /**

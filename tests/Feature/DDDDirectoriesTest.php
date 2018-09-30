@@ -29,36 +29,37 @@ class DDDDirectoriesTest extends TestCase
 		$this->assertTrue(is_dir(app_path('Domain/Models')));
         $this->assertTrue(is_dir(app_path('Domain/Traits')));
         $this->assertTrue(is_dir(app_path('Domain/Criteria')));
-        $this->assertTrue(is_dir(app_path('Domain/Services')));
+        // $this->assertTrue(is_dir(app_path('Domain/Services')));
 		$this->assertTrue(is_dir(app_path('Domain/Listeners')));
         $this->assertTrue(is_dir(app_path('Domain/Contracts')));
         $this->assertTrue(is_dir(app_path('Domain/Validators')));
     }
 
     /** @test */
-    public function app_has_application_directory()
-    {
-        $this->assertTrue(is_dir(app_path('Application/Requests')));
-        $this->assertTrue(is_dir(app_path('Application/Providers')));
-        $this->assertTrue(is_dir(app_path('Application/Exceptions')));
-        $this->assertTrue(is_dir(app_path('Application/Middlewares')));
+    // public function app_has_application_directory()
+    // {
+    //     $this->assertTrue(is_dir(app_path('Application/Requests')));
+    //     $this->assertTrue(is_dir(app_path('Application/Providers')));
+    //     $this->assertTrue(is_dir(app_path('Application/Exceptions')));
+    //     $this->assertTrue(is_dir(app_path('Application/Middlewares')));
 
-    }
+    // }
 
     /** @test */
     public function app_has_infrastructure_directory()
     {
-      	$this->assertTrue(is_dir(app_path('Infrastructure/Jobs')));
-        $this->assertTrue(is_dir(app_path('Infrastructure/Listeners')));
+      	// $this->assertTrue(is_dir(app_path('Infrastructure/Jobs')));
+        $this->assertTrue(is_dir(app_path('Infrastructure/Auth')));
+        // $this->assertTrue(is_dir(app_path('Infrastructure/Listeners')));
         $this->assertTrue(is_dir(app_path('Infrastructure/EloquentRepositories')));
     }
 
-    /** @test */
-    public function app_has_ui_directory()
-    {
-        $this->assertTrue(is_dir(app_path('Interfaces/Web')));
-        $this->assertTrue(is_dir(app_path('Interfaces/API')));
-        $this->assertTrue(is_dir(app_path('Interfaces/Console')));
-    }
+    // /** @test */
+    // public function app_has_ui_directory()
+    // {
+    //     $this->assertTrue(is_dir(app_path('Interfaces/Web')));
+    //     $this->assertTrue(is_dir(app_path('Interfaces/API')));
+    //     $this->assertTrue(is_dir(app_path('Interfaces/Console')));
+    // }
 
 }

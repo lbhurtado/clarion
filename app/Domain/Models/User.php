@@ -49,7 +49,7 @@ class User extends Authenticatable implements JWTSubject, Transformable
 
     public function getJWTIdentifier()
     {
-        return 'mobile';
+        return $this->getKey();
     }
 
     public function getJWTCustomClaims()
