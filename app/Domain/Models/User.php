@@ -2,14 +2,14 @@
 
 namespace Clarion\Domain\Models;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 use Tightenco\Parental\ReturnsChildModels;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
-use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy};
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy, HasToken};
 
 /**
  * Class User.
@@ -18,7 +18,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable implements JWTSubject, Transformable
 {
-    use TransformableTrait, ReturnsChildModels, HasRoles, IsAnonymous, HasMobile, HasAuthy;
+    use TransformableTrait, ReturnsChildModels, HasRoles, IsAnonymous, HasMobile, HasAuthy, HasToken;
 
     public $username = 'mobile';
 
@@ -45,13 +45,8 @@ class User extends Authenticatable implements JWTSubject, Transformable
         return $this->hasMany(Messenger::class, 'identifier', 'identifier');
     }
 
-    public function getJWTIdentifier()
+    public function checkin($class, $attributes)
     {
-        return $this->getKey();
-    }
-
-    public function getJWTCustomClaims()
-    {
-        return [];
+        return Checkin::$class($attributes)->getUser();
     }
 }

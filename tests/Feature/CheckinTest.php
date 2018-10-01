@@ -3,7 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Spatie\Permission\Models\{Role, Admin};
+use Clarion\Domain\Models\{Admin, Staff};
+use Spatie\Permission\Models\Role;
 use Clarion\Domain\Contracts\UserRepository;
 use Clarion\Domain\Criteria\HasTheFollowing;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,5 +39,24 @@ class CheckinTest extends TestCase
     		->pushCriteria(HasTheFollowing::handle(config('clarion.default.admin.handle')));
 
 		$this->assertEquals($this->users->all()->count(), 1);
+    }
+
+	 /** @test */
+    function admin_user_checks_in_one_staff()
+    {
+    	$admin = Admin::first();
+
+    	$attributes = config('clarion.test.user');
+
+    	$staff = $admin->checkin('staff', $attributes);
+
+		$this->assertInstanceOf(Staff::class, $staff);
+
+		$this->assertDatabaseHas('users', [
+			'mobile' => $staff->mobile,
+			'type' => Staff::class,
+		]);
+
+		// $this->assertEquals($staff->getUpline()->id == $admin->id);
     }
 }
