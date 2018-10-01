@@ -9,7 +9,4 @@ class Operator extends User
 	use HasParentModel;
 
 	public static $role = 'operator';
-
-	protected $guard_name = 'hq';
-
 }

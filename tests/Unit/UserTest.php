@@ -8,10 +8,9 @@ use Clarion\Domain\Models\Mobile;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Clarion\Domain\Contracts\UserRepository;
+use Clarion\Domain\Criteria\HasTheFollowing;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Clarion\Domain\Criteria\HasTheFollowing;
-use Clarion\Domain\Criteria\HasTheFollowingMobileNumbers;
 
 class UserTest extends TestCase
 {

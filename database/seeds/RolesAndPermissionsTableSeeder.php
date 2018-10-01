@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
-class RolesAndPermissionsSeeder extends Seeder
+class RolesAndPermissionsTableSeeder extends Seeder
 {
     public function run()
     {
@@ -18,8 +18,6 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'send messages sideways']);
         Permission::create(['name' => 'send messages downwards']);
         Permission::create(['name' => 'vet others']);
-
-        // create roles and assign created permissions
 
         Role::create(['name' => 'subscriber'])
             ->givePermissionTo('check in others');

@@ -20,8 +20,6 @@ class User extends Authenticatable implements JWTSubject, Transformable
 {
     use TransformableTrait, ReturnsChildModels, HasRoles, IsAnonymous, HasMobile, HasAuthy;
 
-    const DEFAULT_PIN = '1234';
-
     public $username = 'mobile';
 
     protected $guard_name = 'api';

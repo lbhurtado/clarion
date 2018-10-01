@@ -11,7 +11,6 @@
 
 namespace Clarion\Infrastructure\Auth;
 
-use Clarion\Domain\Models\User;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
 use Illuminate\Contracts\Auth\Guard as GuardContract;
 
@@ -46,7 +45,7 @@ class Illuminate implements Auth
     public function byCredentials(array $credentials)
     {
         $credentials['mobile'] = \Clarion\Domain\Models\Mobile::number($credentials['mobile']);
-        $credentials['password'] = $credentials['password'] ?? User::DEFAULT_PIN;
+        $credentials['password'] = $credentials['password'] ?? config('clarion.default.pin');
 
         return $this->auth->once($credentials);
 

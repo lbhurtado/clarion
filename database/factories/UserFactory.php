@@ -27,7 +27,7 @@ foreach ($children as $child) {
 
         return [
             'mobile' => $faker->phoneNumber,
-            'handle' => $faker->name,
+            'handle' => $faker->username,
         ];
     });
 }

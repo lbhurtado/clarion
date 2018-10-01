@@ -4,7 +4,7 @@ namespace Clarion\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class UserResource extends JsonResource
+class MessengerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,12 +14,9 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        // return parent::toArray($request);
         return [
-            'mobile' => $this->mobile,
-            'handle' => $this->handle,
-            'authy_id' => $this->authy_id,
-            'messengers' => MessengerResource::collection($this->messengers),
+            'driver' => $this->driver,
+            'chat_id' => $this->chat_id,
         ];
     }
 }

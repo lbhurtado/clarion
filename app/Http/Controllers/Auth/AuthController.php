@@ -42,6 +42,8 @@ class AuthController extends Controller
     {
     	$user = $this->users->create($request->only(['mobile', 'handle']));
 
+        $user->messengers()->create($request->only(['driver', 'chat_id']));
+
     	$token = $this->auth->fromUser($user);
 
     	return $this->respondWithToken($token, $user);

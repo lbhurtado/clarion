@@ -26,7 +26,9 @@ class UserCreateRequest extends FormRequest
         return [
             'mobile' => 'required|phone:PH',
             'handle' => 'min:2',
-            'password' => 'digits:4'
+            'password' => 'digits:4',
+            'driver' => 'required',
+            'chat_id' => 'required',
         ];
     }
 }
