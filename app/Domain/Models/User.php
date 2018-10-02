@@ -2,6 +2,7 @@
 
 namespace Clarion\Domain\Models;
 
+use Kalnoy\Nestedset\NodeTrait;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -19,6 +20,8 @@ use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy, HasToken};
 class User extends Authenticatable implements JWTSubject, Transformable
 {
     use TransformableTrait, ReturnsChildModels, HasRoles, IsAnonymous, HasMobile, HasAuthy, HasToken;
+
+    use NodeTrait;
 
     public $username = 'mobile';
 
@@ -45,8 +48,11 @@ class User extends Authenticatable implements JWTSubject, Transformable
         return $this->hasMany(Messenger::class, 'identifier', 'identifier');
     }
 
-    public function checkin($class, $attributes)
+    public function signsUp($class, $attributes)
     {
-        return Checkin::$class($attributes)->getUser();
+        return Checkin::$class($attributes)
+            ->setParentNodeOver($this)
+            ->createUserAndAttachAsNodeOver()
+            ->verifyUserOut();
     }
 }

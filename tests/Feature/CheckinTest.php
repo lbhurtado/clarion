@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Clarion\Domain\Models\{Admin, Staff};
+use Clarion\Domain\Models\{Admin, Operator, Staff, Worker, Subscriber};
 use Spatie\Permission\Models\Role;
 use Clarion\Domain\Contracts\UserRepository;
 use Clarion\Domain\Criteria\HasTheFollowing;
@@ -42,21 +42,28 @@ class CheckinTest extends TestCase
     }
 
 	 /** @test */
-    function admin_user_checks_in_one_staff()
+    function admin_user_checks_in_operator_staff_worker_subscriber()
     {
     	$admin = Admin::first();
 
-    	$attributes = config('clarion.test.user');
+    	$operator = $admin->signsUp('operator', config('clarion.test.user1'));
+		$this->assertInstanceOf(Operator::class, $operator);
+		$this->assertEquals($operator->parent_id, $admin->id);
+		$this->assertTrue(! is_null($operator->verified_at));
 
-    	$staff = $admin->checkin('staff', $attributes);
-
+    	$staff = $operator->signsUp('staff', config('clarion.test.user2'));
 		$this->assertInstanceOf(Staff::class, $staff);
+		$this->assertEquals($staff->parent_id, $operator->id);
+		$this->assertTrue(! is_null($staff->verified_at));
 
-		$this->assertDatabaseHas('users', [
-			'mobile' => $staff->mobile,
-			'type' => Staff::class,
-		]);
+		$worker = $operator->signsUp('worker', config('clarion.test.user3'));
+		$this->assertInstanceOf(Worker::class, $worker);
+		$this->assertEquals($worker->parent_id, $operator->id);
+		$this->assertTrue(! is_null($worker->verified_at));
 
-		// $this->assertEquals($staff->getUpline()->id == $admin->id);
+		$subscriber = $worker->signsUp('subscriber', config('clarion.test.user4'));
+		$this->assertInstanceOf(Subscriber::class, $subscriber);
+		$this->assertEquals($subscriber->parent_id, $worker->id);
+		$this->assertTrue(! is_null($subscriber->verified_at));
     }
 }

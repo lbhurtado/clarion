@@ -13,6 +13,7 @@
 
 use Clarion\Domain\Models\User;
 use Clarion\Domain\Contracts\UserRepository;
+use Clarion\Domain\Models\{Admin, Operator, Staff, Worker, Subscriber};
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,7 +28,25 @@ Route::get('/test', function (Clarion\Domain\Contracts\UserRepository $users) {
 	});
    // factory(Clarion\Domain\Models\User::class)->create(['mobile' => '09173011987', 'handle' => 'Retsel']);
 
-  $user = $users->findWhere(['handle' => 'Retsel'])->first();
+  // $user = $users->findWhere(['handle' => 'Retsel'])->first();
+
+
+    	$admin = Admin::find(122);
+
+    	// $admin = Admin::create(config('clarion.test.user0'));	
+
+  //   	$operator = $admin->checkin('operator', config('clarion.test.user1'));
+
+  //   	$staff = $operator->checkin('staff', config('clarion.test.user2'));
+
+		// $worker = $operator->checkin('worker', config('clarion.test.user3'));
+
+		// $subscriber = $worker->checkin('subscriber', config('clarion.test.user4'));
+
+    	dd(Admin::$parentClassName);
+    	// dd($admin->getClassNameForRelationships());
+		$result = \Clarion\Domain\Models\User::get()->toTree();
+		dd($result);
 
  //  $user->messengers()->create([
  //    'driver'  => 'Facebook',

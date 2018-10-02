@@ -42,7 +42,10 @@ class ParentModelsTest extends TestCase
 
 		    $this->assertEquals($user->id, $child->id);
 		    $this->assertEquals($user->type, $class);
+            $this->assertInstanceOf($class, $user);
     	}
+
+
     }
 
     /** @test */

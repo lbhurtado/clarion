@@ -153,4 +153,16 @@ class UserTest extends TestCase
 
         $this->assertEquals($users->all()->count(), 2);
     }   
+
+    /** @test */
+    function user_model_has_nodes()
+    {
+        $user1 = User::create(config('clarion.test.user1'));
+        $user2 = User::create(config('clarion.test.user2'));
+
+        $user1->appendNode($user2);
+
+        $this->assertEquals($user1->descendants[0]->id, $user2->id);
+        $this->assertEquals($user2->ancestors[0]->id, $user1->id);
+    }
 }

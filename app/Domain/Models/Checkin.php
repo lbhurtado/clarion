@@ -11,12 +11,14 @@ class Checkin
     		'operator' => 'Clarion\Domain\Models\Operator',
     		'subscriber' => 'Clarion\Domain\Models\Subscriber',
     	];
-
-	protected $object;
     
-    protected $attributes;
+    protected $parent;
 
     protected $class;
+
+    protected $attributes;
+
+    protected $user;
 
     static public function __callStatic($class, $attributes) {
 
@@ -27,14 +29,31 @@ class Checkin
     {
     	$this->class = self::$mappings[$class];
     	$this->attributes = $attributes[0];
+
     }
 
-    public function getUser()
+    public function setParentNodeOver($parent)
     {
-    	$user = app()->make($this->class)::create($this->attributes);
+        $this->parent = $parent;
 
-    	$user->messengers()->create($this->attributes);
+        return $this;
+    }
 
-    	return $user;
+    public function createUserAndAttachAsNodeOver()
+    {
+    	$this->user = app()->make($this->class)::create($this->attributes, $this->parent);
+
+    	$this->user->messengers()->create($this->attributes);
+
+    	return $this;
+    }
+
+    public function verifyUserOut()
+    {
+        $this->user->verified_at = now();
+
+        $this->user->save();
+
+        return $this->user;
     }
 }

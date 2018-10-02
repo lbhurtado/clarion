@@ -16,6 +16,7 @@
         "botman/studio-addons": "~1.2.1",
         "botman/tinker": "~1.0",
         "fideloper/proxy": "~4.0",
+        "kalnoy/nestedset": "^4.3",
         "larapackages/anonymous-relationships": "^1.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
