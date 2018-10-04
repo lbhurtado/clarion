@@ -46,7 +46,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function bot_registers_mobile()
+    public function bot_registers_self_mobile()
     {
         $driver = config('clarion.test.user1.driver');
         $chat_id = config('clarion.test.user1.chat_id');
@@ -56,6 +56,8 @@ class AuthenticationTest extends TestCase
             ->setUser(['id' => $chat_id])
             ->receives('/register')
             ->assertTemplate(Question::class)
+            ->receives('111111')
+            ->assertTemplate(Question::class)            
             ->receives('09189362340')
             ->assertTemplate(Question::class)
             ->receives('1234')

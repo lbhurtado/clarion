@@ -10,6 +10,13 @@ return [
 		],
 		'pin' => 1234
 	],
+	'types' => [
+		'staff' => 'Clarion\Domain\Models\Staff',
+		'admin' => 'Clarion\Domain\Models\Admin',
+		'worker' => 'Clarion\Domain\Models\Worker',
+		'operator' => 'Clarion\Domain\Models\Operator',
+		'subscriber' => 'Clarion\Domain\Models\Subscriber',
+	],
 	'test' => [
 		'user' => [
 			'mobile'  => env('USER_MOBILE',  '09189362340'),

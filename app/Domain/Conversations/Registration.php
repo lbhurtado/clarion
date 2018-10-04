@@ -11,9 +11,21 @@ use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
+use Clarion\Domain\Models\Admin;
+use Clarion\Domain\Criteria\HasTheFollowing;
+use Clarion\Domain\Contracts\FlashRepository;
+
 class Registration extends Conversation
 {
 	protected $user;
+
+    protected $flash;
+
+    protected $model;
+
+    protected $user_id;
+
+    protected $user_type;
 
     /**
      * Start the conversation.
@@ -22,32 +34,52 @@ class Registration extends Conversation
      */
     public function run()
     {
-        $this->inputMobile();
+        $this->inputCode();
+    }
+
+    protected function inputCode()
+    {
+        $question = Question::create(trans('authentication.input_code'));
+
+        $this->ask($question, function (Answer $answer) {
+            $flash = app()->make(FlashRepository::class)
+                ->getByCriteria(HasTheFollowing::code($answer->getText()))
+                ->first();
+
+            $this->flash = $flash;
+
+            // $this->user_id = $flash->user_id;
+            // $this->model = app()->make($flash->getModel());
+            
+            $this->inputMobile();
+        });
     }
 
     protected function inputMobile()
     {
         $question = Question::create(trans('authentication.input_mobile'));
-
         $this->ask($question, function (Answer $answer) {
-
-	        try {
-	              $mobile = Mobile::number($answer->getText());      
-	        } catch (\Exception $e) {
-	            return $this->repeat();
+	        try { 
+                $mobile = Mobile::number($answer->getText());
+            } 
+            catch (\Exception $e) {
+	            return $this->repeat(trans('authentication.input_repeat'));
 	        }
-        	
-        	if ($this->user = User::create(compact('mobile'))) {
-       	 		$driver = $this->bot->getDriver()->getName();
-        		$chat_id = $this->bot->getUser()->getId();
-        		
-        		$this->user->messengers()->create(compact('driver','chat_id'));
+            $driver = $this->bot->getDriver()->getName();
+            $chat_id = $this->bot->getUser()->getId();
+            if ($this->flash->user_id == null) {
+                if ($this->user = ($this->flash->getModel())::create(compact('mobile'))) {
 
-        		event(new UserWasFlagged($this->user));
+                    $this->user->messengers()->create(compact('driver','chat_id'));
+                    event(new UserWasFlagged($this->user));
 
-        		$this->inputPIN();	
-        	}
-        	else return $this->repeat();
+
+                }
+            } else {
+                $this->user = User::find($this->flash->user_id)->signsUp($this->flash->type, compact('mobile', 'driver', 'chat_id'));
+            } 
+
+            $this->inputPIN();  
         });
     }
 
