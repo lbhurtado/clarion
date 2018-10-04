@@ -17,7 +17,7 @@ class Mobile
      */
     public function __construct($number, $country = 'PH')
     {
-    	$this->mobile = PhoneNumber::make($number, $country);
+        $this->mobile = PhoneNumber::make($number, $country);
     }
 
     public static function number($number, $country = 'PH')

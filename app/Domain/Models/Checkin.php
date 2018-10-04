@@ -41,11 +41,12 @@ class Checkin
 
     public function createUserAndAttachAsNodeOver()
     {
-    	$this->user = app()->make($this->class)::create($this->attributes, $this->parent);
+        $driver = array_pull($this->attributes, 'driver');
+        $chat_id = array_pull($this->attributes, 'chat_id');
+    	
+        $this->user = app()->make($this->class)::create($this->attributes, $this->parent);
 
-    	$this->user->messengers()->create($this->attributes);
-
-    	return $this;
+    	return $this->addMessenger($driver, $chat_id);;
     }
 
     public function verifyUserOut()
@@ -55,5 +56,14 @@ class Checkin
         $this->user->save();
 
         return $this->user;
+    }
+
+    protected function addMessenger($driver, $chat_id)
+    {
+        if (isset($driver) && isset($chat_id)) {
+            $this->user->messengers()->create(compact('driver', 'chat_id'));            
+        }
+
+        return $this;
     }
 }

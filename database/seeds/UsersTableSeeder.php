@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use Clarion\Domain\Models\Admin;
+use Clarion\Domain\Models\{Admin, Messenger};
 
 class UsersTableSeeder extends Seeder
 {
@@ -14,7 +14,13 @@ class UsersTableSeeder extends Seeder
     {
         factory(Admin::class)->create([
         	'mobile' => config('clarion.default.admin.mobile'), 
-        	'handle' => config('clarion.default.admin.handle')
-        ]);
+        	'handle' => config('clarion.default.admin.handle'),
+        ])
+            ->messengers()
+            ->save(factory(Messenger::class)->create([
+                'driver' => config('clarion.default.admin.driver'), 
+                'chat_id' => config('clarion.default.admin.chat_id'),
+            ])
+        );
     }
 }

@@ -21,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         Events\UserWasRegistered::class => [
             Listeners\Notify\UserAboutVerification::class,
         ],
+        Events\UserWasFlagged::class => [
+            Listeners\Notify\UserAboutVerification::class,
+        ],
     ];
 
     /**

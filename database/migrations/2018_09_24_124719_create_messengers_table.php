@@ -17,7 +17,7 @@ class CreateMessengersTable extends Migration
 	{
 		Schema::create('messengers', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('identifier');
+            $table->integer('user_id')->unsigned()->nullable();
             $table->string('driver');
             $table->string('chat_id');
             $table->string('first_name')->nullable();
@@ -25,6 +25,7 @@ class CreateMessengersTable extends Migration
             $table->timestamps();
             
             $table->unique(['driver', 'chat_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
 	}
 

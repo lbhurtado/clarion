@@ -33,11 +33,6 @@ class User extends Authenticatable implements JWTSubject, Transformable
         'authy_id'
     ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
 		'mobile',
 		'handle',
@@ -45,7 +40,7 @@ class User extends Authenticatable implements JWTSubject, Transformable
 
     public function messengers()
     {
-        return $this->hasMany(Messenger::class, 'identifier', 'identifier');
+        return $this->hasMany(Messenger::class);
     }
 
     public function signsUp($class, $attributes)
