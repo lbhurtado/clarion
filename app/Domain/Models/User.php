@@ -11,6 +11,7 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy, HasToken};
+use Carbon\Carbon;
 
 /**
  * Class User.
@@ -38,6 +39,14 @@ class User extends Authenticatable implements JWTSubject, Transformable
 		'handle',
 	];
 
+    protected $appends = array('verified_at_for_humans');
+
+    // protected $dates = [
+    //     'verified_at', 
+    //     'created_at', 
+    //     'updated_at'
+    // ];
+
     public function messengers()
     {
         return $this->hasMany(Messenger::class);
@@ -49,5 +58,26 @@ class User extends Authenticatable implements JWTSubject, Transformable
             ->setParentNodeOver($this)
             ->createUserAndAttachAsNodeOver()
             ->verifyUserOut();
+    }
+
+    public function addMessenger($driver, $chat_id)
+    {
+        $this->messengers()
+            ->updateOrCreate(compact('driver'), compact('driver','chat_id'));
+
+        return $this;
+    }
+
+    public function getVerifiedAtForHumansAttribute(){
+        return Carbon::parse($this->attributes['verified_at'])->diffForHumans();
+    }
+
+    public function isVerified()
+    {
+        if ($this->verified_at && $this->verified_at <= Carbon::now()) {        
+            return true;
+        } else {
+            return false;
+        }
     }
 }

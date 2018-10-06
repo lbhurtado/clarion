@@ -34,7 +34,7 @@ class Flash extends Model implements Transformable
     {
         $value = $this->type;
 
-        return config("clarion.types.$value");
+        return (config("clarion.types.$value"));
     }
 
 }

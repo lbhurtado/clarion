@@ -2,6 +2,7 @@
 
 namespace Clarion\Domain\Models;
 
+use Illuminate\Support\Facades\Validator;
 use Propaganistas\LaravelPhone\PhoneNumber;
 
 class Mobile
@@ -46,5 +47,15 @@ class Mobile
         $number = implode('',$split);
 
         return compact('code', 'number');
+    }
+
+    public static function validate($mobile)
+    {
+        $validator = Validator::make(compact('mobile'), ['mobile' => 'required|phone:PH']);
+
+        if ($validator->passes())
+            return static::number($mobile);
+
+        return false;
     }
 }

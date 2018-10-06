@@ -9,23 +9,19 @@ use Clarion\Domain\Jobs\VerifyOTP;
 use Clarion\Domain\Events\UserWasFlagged;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
+use Illuminate\Support\Facades\Validator;
 use Clarion\Domain\Models\Admin;
 use Clarion\Domain\Criteria\HasTheFollowing;
-use Clarion\Domain\Contracts\FlashRepository;
+use Clarion\Domain\Contracts\{UserRepository, MessengerRepository, FlashRepository};
 
 class Registration extends Conversation
 {
+    protected $flash = null;
+
 	protected $user;
-
-    protected $flash;
-
-    protected $model;
-
-    protected $user_id;
-
-    protected $user_type;
 
     /**
      * Start the conversation.
@@ -39,45 +35,54 @@ class Registration extends Conversation
 
     protected function inputCode()
     {
-        $question = Question::create(trans('authentication.input_code'));
-
+        $question = Question::create(trans('authentication.input_code'))
+                        ->addButtons([
+                            Button::create(trans('authentication.button_break'))->value('/break'),
+                        ]);
+        $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
-            $flash = app()->make(FlashRepository::class)
-                ->getByCriteria(HasTheFollowing::code($answer->getText()))
-                ->first();
-
-            $this->flash = $flash;
-
-            // $this->user_id = $flash->user_id;
-            // $this->model = app()->make($flash->getModel());
-            
+            $this->flash = $this->getFlash($code = $answer->getText());
+            if (($code == '') || ($code == '/break') || ++$this->counter == 3)
+                return $this->bot->reply(trans('authentication.break'));
+            if ($this->flash == null) {
+                $this->bot->reply(trans('authentication.input_code_error'));
+                return $this->repeat();
+            }
             $this->inputMobile();
         });
     }
 
     protected function inputMobile()
     {
-        $question = Question::create(trans('authentication.input_mobile'));
+        $question = Question::create(trans('authentication.input_mobile'))
+                        ->addButtons([
+                            Button::create(trans('authentication.button_break'))->value('/break'),
+                        ]);
+        $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
-	        try { 
-                $mobile = Mobile::number($answer->getText());
-            } 
-            catch (\Exception $e) {
-	            return $this->repeat(trans('authentication.input_repeat'));
-	        }
+            if (($answer->getText() == '') || ($answer->getText() == '/break') || ++$this->counter == 3)
+                return $this->bot->reply(trans('authentication.break'));
+	   
+            if (!$mobile = Mobile::validate($answer->getText())) {
+                $this->bot->reply(trans('authentication.input_mobile_error'));
+                return $this->repeat();                
+            }
+
             $driver = $this->bot->getDriver()->getName();
             $chat_id = $this->bot->getUser()->getId();
-            if ($this->flash->user_id == null) {
-                if ($this->user = ($this->flash->getModel())::create(compact('mobile'))) {
-
-                    $this->user->messengers()->create(compact('driver','chat_id'));
-                    event(new UserWasFlagged($this->user));
-
-
-                }
-            } else {
-                $this->user = User::find($this->flash->user_id)->signsUp($this->flash->type, compact('mobile', 'driver', 'chat_id'));
+            
+            if ($this->uplineRegistered()) {
+                if ($this->user = $this->getExistingUser($mobile))
+                    $this->attachToUpline()->addMessenger($driver, $chat_id);
+                else {
+                    $credentials = compact('mobile', 'driver', 'chat_id');
+                    $this->user = $this->getUpline()->signsUp($this->getUserType(), $credentials);
+                } 
             } 
+            else
+                $this->user = $this->autoRegister($mobile, $driver, $chat_id); 
+
+            event(new UserWasFlagged($this->user));            
 
             $this->inputPIN();  
         });
@@ -85,26 +90,34 @@ class Registration extends Conversation
 
     protected function inputPIN()
     {
-        $question = Question::create(trans('authentication.input_pin'));
-
+        $question = Question::create(trans('authentication.input_pin'))
+                        ->addButtons([
+                            Button::create(trans('authentication.button_break'))->value('/break'),
+                        ]);
+        $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
-        	$otp = $answer->getText();
+            if (($answer->getText() == '') || ($answer->getText() == '/break') || ++$this->counter == 3)
+                return $this->bot->reply(trans('authentication.break'));
+
+            $otp = $answer->getText();
         	
         	VerifyOTP::dispatch($this->user, $otp);
-
-        	sleep(2);
+             
         	$this->authenticate();
         });
     }
     
     protected function authenticate()
     {
-        $driver = $this->bot->getDriver()->getName();
-        $chat_id = $this->bot->getUser()->getId();
+        $this->user->refresh();
 
-        $this->bot->reply($this->user->mobile);
+        if (!$this->user->isVerified())
+            return $this->inputPIN();
 
-    	$this->bot->reply(trans('authentication.authenticated', compact('driver', 'chat_id')));
+    	return $this->bot->reply(trans('authentication.authenticated', [
+            'mobile' => $this->user->mobile,
+            'driver' => $this->getDriver(),
+        ]));
     }
 
     protected function getUser()
@@ -112,4 +125,52 @@ class Registration extends Conversation
     	return app()->make(JWTAuth::class)->user();
     }
 
+    protected function uplineRegistered()
+    {
+        return $this->flash->user_id != null;
+    }
+
+    protected function autoRegister($mobile, $driver, $chat_id)
+    {
+        $model = $this->flash->getModel()::firstOrCreate(compact('mobile'));
+        $model->messengers()->updateOrCreate(compact('driver'), compact('driver','chat_id'));
+
+        return $model;
+    }
+
+    protected function getDriver()
+    {
+        return $this->bot->getDriver()->getName();
+    }
+
+    protected function getExistingUser($mobile)
+    {
+        return app()->make(UserRepository::class)
+                    ->getByCriteria(HasTheFollowing::mobile($mobile))
+                    ->first();
+    }
+
+    protected function getUpline()
+    {
+        return app()->make(UserRepository::class)->find($this->flash->user_id);
+    }
+
+    protected function attachToUpline()
+    {
+        $this->getUpline()->appendNode($this->user);
+
+        return $this->user;
+    }
+
+    protected function getUserType()
+    {
+        return $this->flash->type;
+    }
+
+    protected function getFlash($code)
+    {
+        return app()->make(FlashRepository::class)
+                    ->getByCriteria(HasTheFollowing::code($code))
+                    ->first() ?? null;
+    }
 }

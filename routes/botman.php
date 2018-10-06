@@ -2,7 +2,7 @@
 
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Middleware\ApiAi;
-use Clarion\Http\Middleware\ManagesUsersMiddleware;
+use Clarion\Http\Middleware\{ManagesUsersMiddleware, AddTypingIndicator};
 use BotMan\BotMan\Middleware\Dialogflow;
 use Clarion\Domain\Conversations\{Registration, Authentication, Onboarding};
 use Clarion\Http\Controllers\BotManController;
@@ -34,6 +34,9 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 $usersMiddleware = new ManagesUsersMiddleware;
 $botman->middleware->received($usersMiddleware);
+
+$middleware = new AddTypingIndicator(); 
+$botman->middleware->sending($middleware);
 
 $botman->hears('/register', function (BotMan $bot) {
     $bot->startConversation(new Registration());
