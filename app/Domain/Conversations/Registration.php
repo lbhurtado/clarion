@@ -35,17 +35,17 @@ class Registration extends Conversation
 
     protected function inputCode()
     {
-        $question = Question::create(trans('authentication.input_code'))
+        $question = Question::create(trans('registration.input_code'))
                         ->addButtons([
-                            Button::create(trans('authentication.button_break'))->value('/break'),
+                            Button::create(trans('registration.button_break'))->value('/break'),
                         ]);
         $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
             $this->flash = $this->getFlash($code = $answer->getText());
             if (($code == '') || ($code == '/break') || ++$this->counter == 3)
-                return $this->bot->reply(trans('authentication.break'));
+                return $this->bot->reply(trans('registration.break'));
             if ($this->flash == null) {
-                $this->bot->reply(trans('authentication.input_code_error'));
+                $this->bot->reply(trans('registration.input_code_error'));
                 return $this->repeat();
             }
             $this->inputMobile();
@@ -54,17 +54,17 @@ class Registration extends Conversation
 
     protected function inputMobile()
     {
-        $question = Question::create(trans('authentication.input_mobile'))
+        $question = Question::create(trans('registration.input_mobile'))
                         ->addButtons([
-                            Button::create(trans('authentication.button_break'))->value('/break'),
+                            Button::create(trans('registration.button_break'))->value('/break'),
                         ]);
         $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
             if (($answer->getText() == '') || ($answer->getText() == '/break') || ++$this->counter == 3)
-                return $this->bot->reply(trans('authentication.break'));
+                return $this->bot->reply(trans('registration.break'));
 	   
             if (!$mobile = Mobile::validate($answer->getText())) {
-                $this->bot->reply(trans('authentication.input_mobile_error'));
+                $this->bot->reply(trans('registration.input_mobile_error'));
                 return $this->repeat();                
             }
 
@@ -90,14 +90,14 @@ class Registration extends Conversation
 
     protected function inputPIN()
     {
-        $question = Question::create(trans('authentication.input_pin'))
+        $question = Question::create(trans('registration.input_pin'))
                         ->addButtons([
-                            Button::create(trans('authentication.button_break'))->value('/break'),
+                            Button::create(trans('registration.button_break'))->value('/break'),
                         ]);
         $this->counter = 0;
         $this->ask($question, function (Answer $answer) {
             if (($answer->getText() == '') || ($answer->getText() == '/break') || ++$this->counter == 3)
-                return $this->bot->reply(trans('authentication.break'));
+                return $this->bot->reply(trans('registration.break'));
 
             $otp = $answer->getText();
         	
@@ -114,7 +114,7 @@ class Registration extends Conversation
         if (!$this->user->isVerified())
             return $this->inputPIN();
 
-    	return $this->bot->reply(trans('authentication.authenticated', [
+    	return $this->bot->reply(trans('registration.authenticated', [
             'mobile' => $this->user->mobile,
             'driver' => $this->getDriver(),
         ]));

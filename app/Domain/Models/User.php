@@ -39,8 +39,6 @@ class User extends Authenticatable implements JWTSubject, Transformable
 		'handle',
 	];
 
-    protected $appends = array('verified_at_for_humans');
-
     // protected $dates = [
     //     'verified_at', 
     //     'created_at', 
@@ -66,10 +64,6 @@ class User extends Authenticatable implements JWTSubject, Transformable
             ->updateOrCreate(compact('driver'), compact('driver','chat_id'));
 
         return $this;
-    }
-
-    public function getVerifiedAtForHumansAttribute(){
-        return Carbon::parse($this->attributes['verified_at'])->diffForHumans();
     }
 
     public function isVerified()

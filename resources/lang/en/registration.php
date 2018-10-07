@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'input_code'    	=> 'Please enter your code.',
+	'input_code'    	=> 'Please enter your registration code.',
 	'input_code_error' 	=> 'Your code is invalid.',
 	'input_mobile'  	=> 'Please enter your mobile number.',
 	'input_mobile_error'=> 'Your mobile phone number is invalid.',
