@@ -39,11 +39,11 @@ class User extends Authenticatable implements JWTSubject, Transformable
 		'handle',
 	];
 
-    // protected $dates = [
-    //     'verified_at', 
-    //     'created_at', 
-    //     'updated_at'
-    // ];
+    protected $dates = [
+        'verified_at', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function messengers()
     {

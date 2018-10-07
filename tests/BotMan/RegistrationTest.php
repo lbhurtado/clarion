@@ -3,14 +3,14 @@
 namespace Tests\BotMan;
 
 use Tests\TestCase;
-use Clarion\Domain\Models\{Admin, Staff, Operator, Flash};
-use Clarion\Domain\Models\Mobile;
-use BotMan\Drivers\Telegram\TelegramDriver;
+// use Clarion\Domain\Models\{Admin, Staff, Operator, Flash};
+// use Clarion\Domain\Models\Mobile;
+// use BotMan\Drivers\Telegram\TelegramDriver;
 use Clarion\Domain\Contracts\UserRepository;
-use Clarion\Domain\Criteria\HasTheFollowing;
+// use Clarion\Domain\Criteria\HasTheFollowing;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+// use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class RegistrationTest extends TestCase
 {

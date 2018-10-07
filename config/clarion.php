@@ -55,4 +55,71 @@ return [
 			'chat_id' => env('USER4_CHAT_ID', '444444'),
 		],
 	],
+	'seed' => [
+		'users' => [
+			[
+				'mobile' => '09173011987',
+				'handle' => 'admin',
+				'type' => 'Clarion\Domain\Models\Admin'
+			],
+		],
+		'flashes' => [
+			[
+				'code' => '537537', 
+				'type' => 'admin',
+				'handle' => null,
+			],
+			[
+				'code' => '111111', 
+				'type' => 'staff',
+				'handle' => 'admin',
+			],
+			[
+				'code' => '222222', 
+				'type' => 'operator',
+				'handle' => 'admin',
+			],
+		],
+		'permissions' => [
+			[
+				'name' => 'check in others',
+			],
+			[
+				'name' => 'broadcast',
+			],
+		],
+		'roles' => [
+			[
+				'name' => 'admin',
+				'permissions' => [
+					'check in others',
+					'broadcast',
+				],
+			],
+			[
+				'name' => 'staff',
+				'permissions' => [
+					'check in others',
+					'broadcast',
+				],
+			],
+			[
+				'name' => 'operator',
+				'permissions' => [
+					'check in others',
+				],
+			],
+			[
+				'name' => 'worker',
+				'permissions' => [
+					'check in others',
+				],
+			],
+			[
+				'name' => 'subscriber',
+				// 'permissions' => [
+				// ],
+			],
+		],
+	],
 ];

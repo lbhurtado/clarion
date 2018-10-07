@@ -56,9 +56,9 @@ class RolesAndPermissionsTest extends TestCase
     /** @test */
     function roles_and_permissions_can_be_seeded()
     {
-        $this->artisan('db:seed', ['--class' => 'RolesAndPermissionsTableSeeder']);
+        $this->artisan('db:seed', ['--class' => 'ClarionSeeder']);
 
-        $this->assertEquals(Role::all()->count(), 5);
-        $this->assertEquals(Permission::all()->count(), 6);
+        $this->assertCount(count(config('clarion.seed.roles')), Role::all());
+        $this->assertCount(count(config('clarion.seed.permissions')), Permission::all());
     } 
 }
