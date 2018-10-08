@@ -4,7 +4,7 @@ use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Middleware\ApiAi;
 use Clarion\Http\Middleware\{ManagesUsersMiddleware, AddTypingIndicator};
 use BotMan\BotMan\Middleware\Dialogflow;
-use Clarion\Domain\Conversations\{Registration, Login, Authentication, Onboarding};
+use Clarion\Domain\Conversations\{Registration, Login, Address, Onboarding};
 use Clarion\Http\Controllers\BotManController;
 use Clarion\Domain\Contracts\UserRepository;
 use Tymon\JWTAuth\JWTAuth;
@@ -42,6 +42,11 @@ $botman->hears('/register', function (BotMan $bot) {
 $botman->hears('/login', function (BotMan $bot) {
 	if ($bot->getMessage()->getExtras('token'))
     	return $bot->startConversation(new Login());
+})->stopsConversation();
+
+$botman->hears('/address', function (BotMan $bot) {
+	if ($bot->getMessage()->getExtras('token'))
+    	return $bot->startConversation(new Address());
 })->stopsConversation();
 
 // $botman->hears('/start|GET_STARTED', function (BotMan $bot) {
