@@ -11,7 +11,6 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Clarion\Domain\Traits\{HasMobile, IsAnonymous, HasAuthy, HasToken};
-use Carbon\Carbon;
 
 /**
  * Class User.
@@ -66,9 +65,9 @@ class User extends Authenticatable implements JWTSubject, Transformable
         return $this;
     }
 
-    public function isVerified()
+    public function isVerification()
     {
-        return $this->verified_at && $this->verified_at <= Carbon::now();
+        return $this->verified_at && $this->verified_at <= now();
     }
 
     public function isVerificationStale()

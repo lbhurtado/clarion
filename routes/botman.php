@@ -24,13 +24,10 @@ $botman->hears('Start conversation', BotManController::class.'@startConversation
 
 // $botman->middleware->matching($usersMiddleware);
 
-// $dialogflow = Dialogflow::create('b9490b2473084fc8b15a3940580f2acc')->listenForAction();
+$dialogflow = Dialogflow::create('b9490b2473084fc8b15a3940580f2acc')->listenForAction();
 
-// $botman->middleware->received($dialogflow);
+$botman->middleware->received($dialogflow);
 
-// $botman->fallback(function (BotMan $bot){
-//     return $bot->reply($bot->getMessage()->getExtras('apiReply'));
-// });
 
 $usersMiddleware = new ManagesUsersMiddleware;
 $botman->middleware->received($usersMiddleware);
@@ -42,21 +39,15 @@ $botman->hears('/register', function (BotMan $bot) {
     $bot->startConversation(new Registration());
 })->stopsConversation();
 
-// $botman->group(['middleware' => $usersMiddleware], function (BotMan $bot) {
-
-// });
-
 $botman->hears('/login', function (BotMan $bot) {
 	if ($bot->getMessage()->getExtras('token'))
     	return $bot->startConversation(new Login());
-	
 })->stopsConversation();
-
-
-// $botman->hears('/authenticate', function (BotMan $bot) {
-//     $bot->startConversation(new Authentication());
-// })->stopsConversation();
 
 // $botman->hears('/start|GET_STARTED', function (BotMan $bot) {
 //     $bot->startConversation(new Onboarding());
 // })->stopsConversation();
+
+$botman->fallback(function (BotMan $bot){
+    return $bot->reply($bot->getMessage()->getExtras('apiReply'));
+});
