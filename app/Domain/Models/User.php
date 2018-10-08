@@ -68,10 +68,11 @@ class User extends Authenticatable implements JWTSubject, Transformable
 
     public function isVerified()
     {
-        if ($this->verified_at && $this->verified_at <= Carbon::now()) {        
-            return true;
-        } else {
-            return false;
-        }
+        return $this->verified_at && $this->verified_at <= Carbon::now();
+    }
+
+    public function isVerificationStale()
+    {
+        return $this->verified_at && $this->verified_at->addSeconds(60) <= now();
     }
 }
