@@ -17,6 +17,7 @@ class LoginTest extends TestCase
         $this->artisan('db:seed', ['--class' => 'DatabaseSeeder']);
 
         $this->bot
+            ->setUser(['id' => 123456])
             ->receives('/register')
             ->assertQuestion(trans('registration.input_code')) 
             ->receives('537537')
@@ -29,24 +30,12 @@ class LoginTest extends TestCase
     /** @test */
     public function bot_login_requires_login_keyword()
     {
+
         $this->bot
-            ->receives('/login')
-            ->assertQuestion(trans('login.input_pin'))             
+            ->receives('/login')  
+            ->assertTemplate(Question::class)         
             ->receivesInteractiveMessage('/break')
             ->assertReply(trans('login.break')) 
-            ;
-    }
-
-    // /** @test */
-    public function bot_login_requires_valid_user()
-    {
-        $this->bot
-            ->receives('/login')
-            ->assertQuestion(trans('registration.input_mobile')) 
-            ->receives('000000') //invalid mobile number
-            ->assertReply(trans('registration.input_mobile_error')) 
-            ->receives('09173011987')
-            ->assertTemplate(Question::class)
             ;
     }
 }

@@ -74,4 +74,9 @@ class User extends Authenticatable implements JWTSubject, Transformable
     {
         return $this->verified_at && $this->verified_at->addSeconds(60) <= now();
     }
+
+    public function getHandleAttribute($value)
+    {
+        return ucfirst($value);
+    }
 }

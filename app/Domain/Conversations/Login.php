@@ -23,7 +23,8 @@ class Login extends Conversation
 
     protected function inputPIN()
     {
-        $question = Question::create(trans('login.input_pin'))
+        $handle = $this->getUser()->handle;
+        $question = Question::create(trans('login.input_pin', compact('handle')))
                         ->addButtons([
                             Button::create(trans('login.button_break'))->value('/break'),
                         ]);

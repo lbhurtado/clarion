@@ -5,7 +5,7 @@ use BotMan\BotMan\Middleware\ApiAi;
 use Clarion\Http\Middleware\{ManagesUsersMiddleware, AddTypingIndicator};
 use BotMan\BotMan\Middleware\Dialogflow;
 use Clarion\Domain\Conversations\{Registration, Login, Address, Onboarding};
-use Clarion\Http\Controllers\BotManController;
+use Clarion\Http\Controllers\{ClarionController, BotManController};
 use Clarion\Domain\Contracts\UserRepository;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -34,6 +34,8 @@ $botman->middleware->received($usersMiddleware);
 
 $middleware = new AddTypingIndicator(); 
 $botman->middleware->sending($middleware);
+
+$botman->hears('info {keyword}', ClarionController::class.'@infoByKeyword');
 
 $botman->hears('/register', function (BotMan $bot) {
     $bot->startConversation(new Registration());
